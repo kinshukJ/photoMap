@@ -69,7 +69,7 @@
         <!--Add Location-->
         <scene sceneID="iO8-f3-thv">
             <objects>
-                <viewController id="eZf-Nb-6PU" customClass="LocationsViewController" customModule="Photo_Map" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="locationVC" id="eZf-Nb-6PU" customClass="LocationsViewController" customModule="Photo_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vio-CG-J2y"/>
                         <viewControllerLayoutGuide type="bottom" id="nWs-YP-WbV"/>

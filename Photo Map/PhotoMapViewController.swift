@@ -57,7 +57,9 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         // Dismiss UIImagePickerController to go back to your original view controller
 //        dismiss(animated: true, completion: nil)
         dismiss(animated: true) {
-            performSegue(withIdentifier: "tagSegue", sender: nil)
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let userVC = mainStoryboard.instantiateViewController(withIdentifier: "locationVC") as! LocationsViewController
+            self.present(userVC, animated: true, completion: nil)
         }
     }
 
