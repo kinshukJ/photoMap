@@ -9,7 +9,15 @@
 import UIKit
 import MapKit
 
-class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LocationsViewControllerDelegate, MKMapViewDelegate {
+    
+    func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
+        let annotation = MKPointAnnotation()
+        let locationCoordinate = CLLocationCoordinate2D(latitude: Double(latitude), longitude: Double(longitude))
+        annotation.coordinate = locationCoordinate
+        annotation.title = String(describing: latitude)
+        mapView.addAnnotation(annotation)
+    }
 
     @IBOutlet weak var mapView: MKMapView!
     var pickedImage: UIImage!
@@ -26,6 +34,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         mapView.setRegion(region, animated: false)
 
         // Do any additional setup after loading the view.
+        mapView.delegate = self
     }
 
     @IBAction func onCameraPress(_ sender: UIButton) {
@@ -57,9 +66,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         // Dismiss UIImagePickerController to go back to your original view controller
 //        dismiss(animated: true, completion: nil)
         dismiss(animated: true) {
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let userVC = mainStoryboard.instantiateViewController(withIdentifier: "locationVC") as! LocationsViewController
-            self.present(userVC, animated: true, completion: nil)
+            self.performSegue(withIdentifier: "tagSegue", sender: nil)
         }
     }
 
@@ -68,15 +75,25 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let locationsViewController = segue.destination as! LocationsViewController
+        locationsViewController.delegate = self
     }
-    */
-
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseID = "myAnnotationView"
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+        if (annotationView == nil) {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            annotationView!.canShowCallout = true
+            annotationView!.leftCalloutAccessoryView = UIImageView(frame: CGRect(x:0, y:0, width: 50, height:50))
+        }
+        
+        let imageView = annotationView?.leftCalloutAccessoryView as! UIImageView
+        // Add the image you stored from the image picker
+        imageView.image = pickedImage
+        
+        return annotationView
+    }
 }
