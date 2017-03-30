@@ -55,7 +55,10 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         pickedImage = editedImage
         
         // Dismiss UIImagePickerController to go back to your original view controller
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            performSegue(withIdentifier: "tagSegue", sender: nil)
+        }
     }
 
     override func didReceiveMemoryWarning() {
