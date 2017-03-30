@@ -7,11 +7,23 @@
 //
 
 import UIKit
+import MapKit
 
-class PhotoMapViewController: UIViewController {
+class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var mapView: MKMapView!
+    var pickedImage: UIImage!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // One degree of latitude is approximately 111 kilometers (69 miles) at all times.
+        // San Francisco Lat, Long = latitude: 37.783333, longitude: -122.416667
+        let mapCenter = CLLocationCoordinate2D(latitude: 37.783333, longitude: -122.416667)
+        let mapSpan = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        let region = MKCoordinateRegion(center: mapCenter, span: mapSpan)
+        // Set animated property to true to animate the transition to the region
+        mapView.setRegion(region, animated: false)
 
         // Do any additional setup after loading the view.
     }
